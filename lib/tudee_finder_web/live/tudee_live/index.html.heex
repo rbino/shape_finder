@@ -1,0 +1,43 @@
+<.header>
+  Listing Tudees
+  <:actions>
+    <.link patch={~p"/tudees/new"}>
+      <.button>New Tudee</.button>
+    </.link>
+  </:actions>
+</.header>
+
+<.table
+  id="tudees"
+  rows={@streams.tudees}
+  row_click={fn {_id, tudee} -> JS.navigate(~p"/tudees/#{tudee}") end}
+>
+  <:col :let={{_id, tudee}} label="Color"><%= tudee.color %></:col>
+  <:col :let={{_id, tudee}} label="Sides"><%= tudee.sides %></:col>
+  <:col :let={{_id, tudee}} label="Dimensions"><%= tudee.dimensions %></:col>
+  <:action :let={{_id, tudee}}>
+    <div class="sr-only">
+      <.link navigate={~p"/tudees/#{tudee}"}>Show</.link>
+    </div>
+    <.link patch={~p"/tudees/#{tudee}/edit"}>Edit</.link>
+  </:action>
+  <:action :let={{id, tudee}}>
+    <.link
+      phx-click={JS.push("delete", value: %{id: tudee.id}) |> hide("##{id}")}
+      data-confirm="Are you sure?"
+    >
+      Delete
+    </.link>
+  </:action>
+</.table>
+
+<.modal :if={@live_action in [:new, :edit]} id="tudee-modal" show on_cancel={JS.patch(~p"/tudees")}>
+  <.live_component
+    module={TudeeFinderWeb.TudeeLive.FormComponent}
+    id={@tudee.id || :new}
+    title={@page_title}
+    action={@live_action}
+    tudee={@tudee}
+    patch={~p"/tudees"}
+  />
+</.modal>
