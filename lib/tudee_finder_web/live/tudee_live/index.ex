@@ -4,6 +4,8 @@ defmodule TudeeFinderWeb.TudeeLive.Index do
   alias TudeeFinder.Tudees
   alias TudeeFinder.Tudees.Tudee
 
+  import TudeeFinderWeb.TudeeLive.TudeeComponent
+
   @impl true
   def mount(_params, _session, socket) do
     {:ok, stream(socket, :tudees, Tudees.list_tudees())}

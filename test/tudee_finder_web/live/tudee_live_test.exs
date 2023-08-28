@@ -47,7 +47,7 @@ defmodule TudeeFinderWeb.TudeeLiveTest do
     test "updates tudee in listing", %{conn: conn, tudee: tudee} do
       {:ok, index_live, _html} = live(conn, ~p"/tudees")
 
-      assert index_live |> element("#tudees-#{tudee.id} a", "Edit") |> render_click() =~
+      assert index_live |> element("#tudees-#{tudee.id}-edit") |> render_click() =~
                "Edit Tudee"
 
       assert_patch(index_live, ~p"/tudees/#{tudee}/edit")
@@ -69,7 +69,7 @@ defmodule TudeeFinderWeb.TudeeLiveTest do
     test "deletes tudee in listing", %{conn: conn, tudee: tudee} do
       {:ok, index_live, _html} = live(conn, ~p"/tudees")
 
-      assert index_live |> element("#tudees-#{tudee.id} a", "Delete") |> render_click()
+      assert index_live |> element("#tudees-#{tudee.id}-delete") |> render_click()
       refute has_element?(index_live, "#tudees-#{tudee.id}")
     end
   end
