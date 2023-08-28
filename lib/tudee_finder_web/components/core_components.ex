@@ -662,4 +662,35 @@ defmodule TudeeFinderWeb.CoreComponents do
   def translate_errors(errors, field) when is_list(errors) do
     for {^field, {msg, opts}} <- errors, do: translate_error({msg, opts})
   end
+
+  @doc ~S"""
+  Renders a flex with generic styling
+  """
+  attr :id, :string, required: true
+  attr :items, :list, required: true
+  attr :item_id, :any, default: nil, doc: "the function for generating the item id"
+  attr :item_click, :any, default: nil, doc: "the function for handling phx-click on each item"
+
+  slot :inner_block, required: true
+
+  def flex(assigns) do
+    assigns =
+      with %{items: %Phoenix.LiveView.LiveStream{}} <- assigns do
+        assign(assigns, item_id: assigns.item_id || fn {id, _item} -> id end)
+      end
+
+    ~H"""
+    <div class="mt-11">
+      <div
+        id={@id}
+        phx-update={match?(%Phoenix.LiveView.LiveStream{}, @items) && "stream"}
+        class="flex flex-wrap justify-center gap-4 py-8 text-sm sm:gap-8"
+      >
+        <div :for={item <- @items} class="flex-none" id={@item_id && @item_id.(item)}>
+          <%= render_slot(@inner_block, item) %>
+        </div>
+      </div>
+    </div>
+    """
+  end
 end
