@@ -8,7 +8,7 @@ defmodule TudeeFinder.TudeesTest do
 
     import TudeeFinder.TudeesFixtures
 
-    @invalid_attrs %{color: nil, sides: nil, dimensions: nil}
+    @invalid_attrs %{color: "foobar", sides: 42, dimensions: "nope"}
 
     test "list_tudees/0 returns all tudees" do
       tudee = tudee_fixture()
@@ -21,11 +21,11 @@ defmodule TudeeFinder.TudeesTest do
     end
 
     test "create_tudee/1 with valid data creates a tudee" do
-      valid_attrs = %{color: :blue, sides: 42, dimensions: :big}
+      valid_attrs = %{color: :blue, sides: 4, dimensions: :big}
 
       assert {:ok, %Tudee{} = tudee} = Tudees.create_tudee(valid_attrs)
       assert tudee.color == :blue
-      assert tudee.sides == 42
+      assert tudee.sides == 4
       assert tudee.dimensions == :big
     end
 
@@ -35,11 +35,11 @@ defmodule TudeeFinder.TudeesTest do
 
     test "update_tudee/2 with valid data updates the tudee" do
       tudee = tudee_fixture()
-      update_attrs = %{color: :red, sides: 43, dimensions: :small}
+      update_attrs = %{color: :red, sides: 5, dimensions: :small}
 
       assert {:ok, %Tudee{} = tudee} = Tudees.update_tudee(tudee, update_attrs)
       assert tudee.color == :red
-      assert tudee.sides == 43
+      assert tudee.sides == 5
       assert tudee.dimensions == :small
     end
 

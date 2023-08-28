@@ -4,8 +4,8 @@ defmodule TudeeFinderWeb.TudeeLiveTest do
   import Phoenix.LiveViewTest
   import TudeeFinder.TudeesFixtures
 
-  @create_attrs %{color: :blue, sides: 42, dimensions: :big}
-  @update_attrs %{color: :red, sides: 43, dimensions: :small}
+  @create_attrs %{color: :blue, sides: 7, dimensions: :big}
+  @update_attrs %{color: :red, sides: 8, dimensions: :small}
   @invalid_attrs %{color: nil, sides: nil, dimensions: nil}
 
   defp create_tudee(_) do

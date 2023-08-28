@@ -12,7 +12,7 @@ defmodule TudeeFinder.TudeesFixtures do
       attrs
       |> Enum.into(%{
         color: :blue,
-        sides: 42,
+        sides: 7,
         dimensions: :big
       })
       |> TudeeFinder.Tudees.create_tudee()

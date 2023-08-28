@@ -15,5 +15,6 @@ defmodule TudeeFinder.Tudees.Tudee do
     tudee
     |> cast(attrs, [:color, :sides, :dimensions])
     |> validate_required([:color, :sides, :dimensions])
+    |> validate_number(:sides, greater_than: 2, less_than: 10)
   end
 end
