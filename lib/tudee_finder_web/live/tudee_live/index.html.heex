@@ -21,14 +21,10 @@
   </form>
 </div>
 
-<.flex
-  id="tudees"
-  items={@streams.tudees}
-  :let={{id, tudee}}
->
+<.flex :let={{id, tudee}} id="tudees" items={@streams.tudees}>
   <div class="group relative hover:bg-stone-100 w-40 h-40">
     <.link id={"#{id}-edit"} patch={~p"/tudees/#{tudee}/edit"}>
-      <.tudee_svg tudee={tudee}/>
+      <.tudee_svg tudee={tudee} />
     </.link>
     <.link
       id={"#{id}-delete"}
@@ -46,7 +42,12 @@
   </div>
 </.flex>
 
-<.modal :if={@live_action in [:new, :edit]} id="tudee-modal" show on_cancel={JS.patch(~p"/tudees")}>
+<.modal
+  :if={@live_action in [:new, :edit]}
+  id="tudee-modal"
+  show
+  on_cancel={JS.patch(~p"/tudees")}
+>
   <.live_component
     module={TudeeFinderWeb.TudeeLive.FormComponent}
     id={@tudee.id || :new}
