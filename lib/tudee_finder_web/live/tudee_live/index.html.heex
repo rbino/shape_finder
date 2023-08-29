@@ -7,6 +7,20 @@
   </:actions>
 </.header>
 
+<div class="flex flex-wrap gap-8 mt-8 justify-center">
+  <form phx-change="selector_updated" class="w-full md:w-1/2">
+    <.input
+      id="tudee-selector"
+      name="selector"
+      type="text"
+      placeholder="Selector"
+      value={@selector || ""}
+      errors={List.wrap(@selector_error)}
+      phx-debounce="300"
+    />
+  </form>
+</div>
+
 <.flex
   id="tudees"
   items={@streams.tudees}
