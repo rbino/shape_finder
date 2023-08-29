@@ -17,8 +17,12 @@ defmodule TudeeFinder.Tudees do
       [%Tudee{}, ...]
 
   """
-  def list_tudees do
-    Repo.all(Tudee)
+  def list_tudees(opts \\ []) do
+    where = opts[:where] || true
+
+    query = from Tudee, where: ^where
+
+    Repo.all(query)
   end
 
   @doc """
