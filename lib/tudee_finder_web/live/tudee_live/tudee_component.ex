@@ -41,7 +41,7 @@ defmodule TudeeFinderWeb.TudeeLive.TudeeComponent do
   defp fill(:red), do: "fill-red-600"
   defp fill(:green), do: "fill-green-600"
   defp fill(:yellow), do: "fill-yellow-400"
-  defp fill(:violet), do: "fill-violet-700"
+  defp fill(:violet), do: "fill-violet-400"
   defp fill(:pink), do: "fill-pink-400"
   defp fill(:orange), do: "fill-orange-500"
 
