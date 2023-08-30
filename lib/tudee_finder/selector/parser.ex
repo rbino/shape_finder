@@ -1,6 +1,9 @@
 defmodule TudeeFinder.Selector.Parser do
   import NimbleParsec
 
+  alias TudeeFinder.Tudees.Tudee
+
+  alias TudeeFinder.Selector.AST.ColorFilter
   alias TudeeFinder.Selector.AST.DimensionsFilter
   alias TudeeFinder.Selector.Parser.Error
 
@@ -20,14 +23,31 @@ defmodule TudeeFinder.Selector.Parser do
       chonky
     ])
 
+  colors =
+    Ecto.Enum.values(Tudee, :color)
+    |> Enum.map(fn color ->
+      color
+      |> Atom.to_string()
+      |> string()
+      |> replace(%ColorFilter{color: color})
+    end)
+    |> choice()
+
+  color_filter =
+    colors
+    |> label("color filter")
+
   dimensions_filter =
-    optional(blankspace)
-    |> concat(dimensions)
-    |> optional(blankspace)
+    dimensions
     |> label("dimensions filter")
 
   tudee_selector =
-    dimensions_filter
+    optional(blankspace)
+    |> choice([
+      dimensions_filter,
+      color_filter
+    ])
+    |> optional(blankspace)
     |> eos()
 
   defparsec(:parse_selector, tudee_selector)
