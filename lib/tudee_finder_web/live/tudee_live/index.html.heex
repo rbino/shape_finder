@@ -40,6 +40,11 @@
       </button>
     </.link>
   </div>
+  <:empty_placeholder>
+    <span class="text-slate-500 italic">
+      <%= if @selector != nil and @selector != "", do: "No matching Tudees :(", else: "No Tudees :(" %>
+    </span>
+  </:empty_placeholder>
 </.flex>
 
 <.modal

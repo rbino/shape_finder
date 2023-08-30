@@ -672,6 +672,7 @@ defmodule TudeeFinderWeb.CoreComponents do
   attr :item_click, :any, default: nil, doc: "the function for handling phx-click on each item"
 
   slot :inner_block, required: true
+  slot :empty_placeholder, doc: "the slot for showing something if there are no items"
 
   def flex(assigns) do
     assigns =
@@ -686,6 +687,9 @@ defmodule TudeeFinderWeb.CoreComponents do
         phx-update={match?(%Phoenix.LiveView.LiveStream{}, @items) && "stream"}
         class="flex flex-wrap justify-center gap-4 py-8 text-sm sm:gap-8"
       >
+        <div :if={@empty_placeholder != []} id={"#{@id}-empty-placeholder"} class="hidden only:block">
+          <%= render_slot(@empty_placeholder) %>
+        </div>
         <div :for={item <- @items} class="flex-none" id={@item_id && @item_id.(item)}>
           <%= render_slot(@inner_block, item) %>
         </div>
