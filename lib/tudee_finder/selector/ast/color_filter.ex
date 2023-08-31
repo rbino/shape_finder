@@ -5,7 +5,7 @@ defmodule TudeeFinder.Selector.AST.ColorFilter do
 
   alias TudeeFinder.Selector.Filter
 
-  defimpl Filter, for: __MODULE__ do
+  defimpl Filter do
     def where(color_filter) do
       dynamic([tudee], tudee.color == ^color_filter.color)
     end
