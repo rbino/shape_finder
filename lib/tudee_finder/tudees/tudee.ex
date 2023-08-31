@@ -2,6 +2,14 @@ defmodule TudeeFinder.Tudees.Tudee do
   use Ecto.Schema
   import Ecto.Changeset
 
+  @type t :: %__MODULE__{
+          color: color(),
+          sides: non_neg_integer(),
+          dimensions: dimensions()
+        }
+  @type color :: :blue | :red | :green | :yellow | :violet | :pink | :orange
+  @type dimensions :: :big | :small
+
   schema "tudees" do
     field :color, Ecto.Enum, values: [:blue, :red, :green, :yellow, :violet, :pink, :orange]
     field :sides, :integer
