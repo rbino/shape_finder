@@ -15,5 +15,15 @@ defmodule TudeeFinder.Selector.AST.BinaryOp do
 
     defp combine(:and, lhs, rhs), do: dynamic([tudee], ^lhs and ^rhs)
     defp combine(:or, lhs, rhs), do: dynamic([tudee], ^lhs or ^rhs)
+
+    def match?(binary_op, tudee) do
+      case binary_op.operator do
+        :and ->
+          Filter.match?(binary_op.lhs, tudee) and Filter.match?(binary_op.rhs, tudee)
+
+        :or ->
+          Filter.match?(binary_op.lhs, tudee) or Filter.match?(binary_op.rhs, tudee)
+      end
+    end
   end
 end

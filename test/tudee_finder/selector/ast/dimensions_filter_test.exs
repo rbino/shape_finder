@@ -18,4 +18,18 @@ defmodule TudeeFinder.Selector.AST.DimensionsFilterTest do
       assert [small_tudee] == Tudees.list_tudees(where: where)
     end
   end
+
+  describe "Filter.match?/1" do
+    test "returns true for the same dimensions" do
+      tudee = tudee_fixture(%{dimensions: :big})
+
+      assert %DimensionsFilter{dimensions: :big} |> Filter.match?(tudee)
+    end
+
+    test "returns true for different dimensions" do
+      tudee = tudee_fixture(%{dimensions: :small})
+
+      refute %DimensionsFilter{dimensions: :big} |> Filter.match?(tudee)
+    end
+  end
 end
