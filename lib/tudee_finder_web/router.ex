@@ -17,14 +17,12 @@ defmodule TudeeFinderWeb.Router do
   scope "/", TudeeFinderWeb do
     pipe_through :browser
 
-    get "/", PageController, :home
+    live "/", TudeeLive.Index, :index
+    live "/new", TudeeLive.Index, :new
+    live "/:id/edit", TudeeLive.Index, :edit
 
-    live "/tudees", TudeeLive.Index, :index
-    live "/tudees/new", TudeeLive.Index, :new
-    live "/tudees/:id/edit", TudeeLive.Index, :edit
-
-    live "/tudees/:id", TudeeLive.Show, :show
-    live "/tudees/:id/show/edit", TudeeLive.Show, :edit
+    live "/:id", TudeeLive.Show, :show
+    live "/:id/show/edit", TudeeLive.Show, :edit
   end
 
   # Other scopes may use custom stacks.

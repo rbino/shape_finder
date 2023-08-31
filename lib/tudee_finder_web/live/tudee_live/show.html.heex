@@ -2,7 +2,7 @@
   Tudee <%= @tudee.id %>
   <:subtitle>This is a tudee record from your database.</:subtitle>
   <:actions>
-    <.link patch={~p"/tudees/#{@tudee}/show/edit"} phx-click={JS.push_focus()}>
+    <.link patch={~p"/#{@tudee}/show/edit"} phx-click={JS.push_focus()}>
       <.button>Edit tudee</.button>
     </.link>
   </:actions>
@@ -14,13 +14,13 @@
   <:item title="Dimensions"><%= @tudee.dimensions %></:item>
 </.list>
 
-<.back navigate={~p"/tudees"}>Back to tudees</.back>
+<.back navigate={~p"/"}>Back to tudees</.back>
 
 <.modal
   :if={@live_action == :edit}
   id="tudee-modal"
   show
-  on_cancel={JS.patch(~p"/tudees/#{@tudee}")}
+  on_cancel={JS.patch(~p"/#{@tudee}")}
 >
   <.live_component
     module={TudeeFinderWeb.TudeeLive.FormComponent}
@@ -28,6 +28,6 @@
     title={@page_title}
     action={@live_action}
     tudee={@tudee}
-    patch={~p"/tudees/#{@tudee}"}
+    patch={~p"/#{@tudee}"}
   />
 </.modal>

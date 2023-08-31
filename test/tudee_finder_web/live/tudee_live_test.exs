@@ -17,18 +17,18 @@ defmodule TudeeFinderWeb.TudeeLiveTest do
     setup [:create_tudee]
 
     test "lists all tudees", %{conn: conn} do
-      {:ok, _index_live, html} = live(conn, ~p"/tudees")
+      {:ok, _index_live, html} = live(conn, ~p"/")
 
       assert html =~ "Listing Tudees"
     end
 
     test "saves new tudee", %{conn: conn} do
-      {:ok, index_live, _html} = live(conn, ~p"/tudees")
+      {:ok, index_live, _html} = live(conn, ~p"/")
 
       assert index_live |> element("a", "New Tudee") |> render_click() =~
                "New Tudee"
 
-      assert_patch(index_live, ~p"/tudees/new")
+      assert_patch(index_live, ~p"/new")
 
       assert index_live
              |> form("#tudee-form", tudee: @invalid_attrs)
@@ -38,19 +38,19 @@ defmodule TudeeFinderWeb.TudeeLiveTest do
              |> form("#tudee-form", tudee: @create_attrs)
              |> render_submit()
 
-      assert_patch(index_live, ~p"/tudees")
+      assert_patch(index_live, ~p"/")
 
       html = render(index_live)
       assert html =~ "Tudee created successfully"
     end
 
     test "updates tudee in listing", %{conn: conn, tudee: tudee} do
-      {:ok, index_live, _html} = live(conn, ~p"/tudees")
+      {:ok, index_live, _html} = live(conn, ~p"/")
 
       assert index_live |> element("#tudees-#{tudee.id}-edit") |> render_click() =~
                "Edit Tudee"
 
-      assert_patch(index_live, ~p"/tudees/#{tudee}/edit")
+      assert_patch(index_live, ~p"/#{tudee}/edit")
 
       assert index_live
              |> form("#tudee-form", tudee: @invalid_attrs)
@@ -60,14 +60,14 @@ defmodule TudeeFinderWeb.TudeeLiveTest do
              |> form("#tudee-form", tudee: @update_attrs)
              |> render_submit()
 
-      assert_patch(index_live, ~p"/tudees")
+      assert_patch(index_live, ~p"/")
 
       html = render(index_live)
       assert html =~ "Tudee updated successfully"
     end
 
     test "deletes tudee in listing", %{conn: conn, tudee: tudee} do
-      {:ok, index_live, _html} = live(conn, ~p"/tudees")
+      {:ok, index_live, _html} = live(conn, ~p"/")
 
       assert index_live |> element("#tudees-#{tudee.id}-delete") |> render_click()
       refute has_element?(index_live, "#tudees-#{tudee.id}")
@@ -78,18 +78,18 @@ defmodule TudeeFinderWeb.TudeeLiveTest do
     setup [:create_tudee]
 
     test "displays tudee", %{conn: conn, tudee: tudee} do
-      {:ok, _show_live, html} = live(conn, ~p"/tudees/#{tudee}")
+      {:ok, _show_live, html} = live(conn, ~p"/#{tudee}")
 
       assert html =~ "Show Tudee"
     end
 
     test "updates tudee within modal", %{conn: conn, tudee: tudee} do
-      {:ok, show_live, _html} = live(conn, ~p"/tudees/#{tudee}")
+      {:ok, show_live, _html} = live(conn, ~p"/#{tudee}")
 
       assert show_live |> element("a", "Edit") |> render_click() =~
                "Edit Tudee"
 
-      assert_patch(show_live, ~p"/tudees/#{tudee}/show/edit")
+      assert_patch(show_live, ~p"/#{tudee}/show/edit")
 
       assert show_live
              |> form("#tudee-form", tudee: @invalid_attrs)
@@ -99,7 +99,7 @@ defmodule TudeeFinderWeb.TudeeLiveTest do
              |> form("#tudee-form", tudee: @update_attrs)
              |> render_submit()
 
-      assert_patch(show_live, ~p"/tudees/#{tudee}")
+      assert_patch(show_live, ~p"/#{tudee}")
 
       html = render(show_live)
       assert html =~ "Tudee updated successfully"
