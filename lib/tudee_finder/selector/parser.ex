@@ -2,6 +2,7 @@ defmodule TudeeFinder.Selector.Parser do
   import NimbleParsec
 
   alias TudeeFinder.Tudees.Tudee
+  alias TudeeFinder.Selector.AST.BinaryOp
   alias TudeeFinder.Selector.AST.ColorFilter
   alias TudeeFinder.Selector.AST.DimensionFilter
   alias TudeeFinder.Selector.AST.SideCountFilter
@@ -29,6 +30,22 @@ defmodule TudeeFinder.Selector.Parser do
     ])
     |> map({String, :to_existing_atom, []})
 
+  and_operator =
+    choice([
+      string("and"),
+      string("AND")
+    ])
+    |> label("AND")
+    |> replace(:and)
+
+  or_operator =
+    choice([
+      string("or"),
+      string("OR")
+    ])
+    |> label("OR")
+    |> replace(:or)
+
   dimension_filter =
     choice([small, big])
     |> label("dimension filter")
@@ -53,13 +70,55 @@ defmodule TudeeFinder.Selector.Parser do
     |> label("side count filter")
     |> post_traverse(:build_side_count_filter)
 
-  tudee_selector =
-    optional(blankspace)
-    |> choice([
+  filter =
+    choice([
       dimension_filter,
       color_filter,
       side_count_filter
     ])
+    |> label("filter")
+
+  parenthesized_expression =
+    ignore(ascii_char([?(]))
+    |> optional(blankspace)
+    |> concat(parsec(:expression))
+    |> optional(blankspace)
+    |> ignore(ascii_char([?)]))
+
+  factor =
+    choice([
+      parenthesized_expression,
+      filter
+    ])
+    |> label("factor")
+
+  and_operation =
+    factor
+    |> concat(blankspace)
+    |> ignore(and_operator)
+    |> concat(blankspace)
+    |> parsec(:term)
+    |> post_traverse(:build_and)
+
+  or_operation =
+    parsec(:term)
+    |> concat(blankspace)
+    |> ignore(or_operator)
+    |> concat(blankspace)
+    |> parsec(:expression)
+    |> post_traverse(:build_or)
+
+  defcombinatorp :term,
+                 choice([and_operation, factor])
+                 |> label("term")
+
+  defcombinatorp :expression,
+                 choice([or_operation, parsec(:term)])
+                 |> label("expression")
+
+  tudee_selector =
+    optional(blankspace)
+    |> parsec(:expression)
     |> optional(blankspace)
     |> eos()
 
@@ -67,6 +126,14 @@ defmodule TudeeFinder.Selector.Parser do
 
   defp build_side_count_filter(rest, [value, operator], context, _line, _offset) do
     {rest, [%SideCountFilter{operator: operator, value: value}], context}
+  end
+
+  defp build_or(rest, [rhs, lhs], context, _line, _offset) do
+    {rest, [%BinaryOp{lhs: lhs, rhs: rhs, operator: :or}], context}
+  end
+
+  defp build_and(rest, [rhs, lhs], context, _line, _offset) do
+    {rest, [%BinaryOp{lhs: lhs, rhs: rhs, operator: :and}], context}
   end
 
   def parse(selector) do
