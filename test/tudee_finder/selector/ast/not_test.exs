@@ -4,6 +4,7 @@ defmodule TudeeFinder.Selector.AST.NotTest do
   alias TudeeFinder.Tudees
   alias TudeeFinder.Selector.Filter
   alias TudeeFinder.Selector.AST.Not
+  alias TudeeFinder.Selector.AST.ColorFilter
   alias TudeeFinder.Selector.AST.DimensionFilter
   import TudeeFinder.TudeesFixtures
 
@@ -17,6 +18,20 @@ defmodule TudeeFinder.Selector.AST.NotTest do
         |> Filter.where()
 
       assert [big_tudee] == Tudees.list_tudees(where: where)
+    end
+  end
+
+  describe "Filter.match?/1" do
+    test "returns true if the inner expression returns false" do
+      tudee = tudee_fixture(%{color: :green})
+
+      assert %Not{expression: %ColorFilter{color: :red}} |> Filter.match?(tudee)
+    end
+
+    test "returns false if the inner expression returns true" do
+      tudee = tudee_fixture(%{color: :yellow})
+
+      refute %Not{expression: %ColorFilter{color: :yellow}} |> Filter.match?(tudee)
     end
   end
 end

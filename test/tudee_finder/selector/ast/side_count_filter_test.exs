@@ -24,4 +24,18 @@ defmodule TudeeFinder.Selector.AST.SideCountFilterTest do
       assert hexagon not in result
     end
   end
+
+  describe "Filter.match?/1" do
+    test "returns true if the comparison evaluates to true" do
+      tudee = tudee_fixture(%{sides: 7})
+
+      assert %SideCountFilter{operator: :==, value: 7} |> Filter.match?(tudee)
+    end
+
+    test "returns false if the comparison evaluates to false" do
+      tudee = tudee_fixture(%{sides: 4})
+
+      refute %SideCountFilter{operator: :>, value: 8} |> Filter.match?(tudee)
+    end
+  end
 end

@@ -11,5 +11,9 @@ defmodule TudeeFinder.Selector.AST.Not do
 
       dynamic([tudee], not (^where))
     end
+
+    def match?(not_filter, tudee) do
+      not Filter.match?(not_filter.expression, tudee)
+    end
   end
 end

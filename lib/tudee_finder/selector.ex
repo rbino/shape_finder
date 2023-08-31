@@ -1,4 +1,5 @@
 defmodule TudeeFinder.Selector do
+  alias TudeeFinder.Tudees.Tudee
   alias TudeeFinder.Selector.Filter
   alias TudeeFinder.Selector.Parser
 
@@ -14,5 +15,9 @@ defmodule TudeeFinder.Selector do
 
   def where(ast_root) when is_struct(ast_root) do
     {:ok, Filter.where(ast_root)}
+  end
+
+  def match?(%Tudee{} = tudee, ast_root) when is_struct(ast_root) do
+    Filter.match?(ast_root, tudee)
   end
 end

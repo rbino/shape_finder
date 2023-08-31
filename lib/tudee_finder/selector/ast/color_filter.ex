@@ -9,5 +9,9 @@ defmodule TudeeFinder.Selector.AST.ColorFilter do
     def where(color_filter) do
       dynamic([tudee], tudee.color == ^color_filter.color)
     end
+
+    def match?(color_filter, tudee) do
+      color_filter.color == tudee.color
+    end
   end
 end

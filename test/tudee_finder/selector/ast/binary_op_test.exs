@@ -66,4 +66,50 @@ defmodule TudeeFinder.Selector.AST.BinaryOpTest do
       assert small_and_green not in result
     end
   end
+
+  describe "Filter.match?/1" do
+    test "returns true if both filters return true with AND" do
+      tudee = tudee_fixture(%{dimensions: :big, color: :red})
+
+      assert %BinaryOp{
+               operator: :and,
+               lhs: %DimensionFilter{dimensions: :big},
+               rhs: %ColorFilter{color: :red}
+             }
+             |> Filter.match?(tudee)
+    end
+
+    test "returns false if one of the filters return false with AND" do
+      tudee = tudee_fixture(%{dimensions: :big, color: :red})
+
+      refute %BinaryOp{
+               operator: :and,
+               lhs: %DimensionFilter{dimensions: :big},
+               rhs: %ColorFilter{color: :green}
+             }
+             |> Filter.match?(tudee)
+    end
+
+    test "returns true if one of the filter returns true with OR" do
+      tudee = tudee_fixture(%{dimensions: :big, color: :red})
+
+      assert %BinaryOp{
+               operator: :or,
+               lhs: %DimensionFilter{dimensions: :small},
+               rhs: %ColorFilter{color: :red}
+             }
+             |> Filter.match?(tudee)
+    end
+
+    test "returns false if both the filters return false with OR" do
+      tudee = tudee_fixture(%{dimensions: :big, color: :red})
+
+      refute %BinaryOp{
+               operator: :or,
+               lhs: %DimensionFilter{dimensions: :small},
+               rhs: %ColorFilter{color: :yellow}
+             }
+             |> Filter.match?(tudee)
+    end
+  end
 end
