@@ -43,7 +43,7 @@ defmodule TudeeFinderWeb.TudeeLive.Index do
 
   @impl true
   def handle_info({TudeeFinderWeb.TudeeLive.FormComponent, {:saved, tudee}}, socket) do
-    {:noreply, stream_insert(socket, :tudees, tudee)}
+    {:noreply, maybe_insert_tudee(socket, tudee)}
   end
 
   @impl true
@@ -62,18 +62,35 @@ defmodule TudeeFinderWeb.TudeeLive.Index do
     {:noreply, update_selector_and_filter_tudees(socket, selector)}
   end
 
+  defp maybe_insert_tudee(%{assigns: %{selector_ast: nil}} = socket, tudee) do
+    stream_insert(socket, :tudees, tudee)
+  end
+
+  defp maybe_insert_tudee(%{assigns: %{selector_ast: selector_ast}} = socket, tudee) do
+    if Selector.match?(tudee, selector_ast) do
+      stream_insert(socket, :tudees, tudee)
+    else
+      socket
+    end
+  end
+
   defp reset_selector(socket) do
     socket
     |> assign(:selector, nil)
+    |> assign(:selector_ast, nil)
     |> assign(:selector_error, nil)
     |> stream(:tudees, Tudees.list_tudees(), reset: true)
   end
 
   defp update_selector_and_filter_tudees(socket, selector) do
-    case Selector.where(selector) do
-      {:ok, where} ->
+    case Selector.parse(selector) do
+      {:ok, ast} ->
+        # This cannot fail
+        {:ok, where} = Selector.where(ast)
+
         socket
         |> assign(:selector, selector)
+        |> assign(:selector_ast, ast)
         |> assign(:selector_error, nil)
         |> stream(:tudees, Tudees.list_tudees(where: where), reset: true)
 
@@ -86,6 +103,7 @@ defmodule TudeeFinderWeb.TudeeLive.Index do
           |> push_navigate(to: ~p"/tudees")
         else
           # TODO: provide some more detailed feedback in the input field
+          # Do not touch the AST, so we keep filtering with the old one
           socket
           |> assign(:selector, selector)
           |> assign(:selector_error, message)
