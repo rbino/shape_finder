@@ -5,7 +5,7 @@ defmodule TudeeFinder.Selector.AST.DimensionFilter do
 
   alias TudeeFinder.Selector.Filter
 
-  defimpl Filter, for: __MODULE__ do
+  defimpl Filter do
     def where(dimension_filter) do
       dynamic([tudee], tudee.dimensions == ^dimension_filter.dimensions)
     end
