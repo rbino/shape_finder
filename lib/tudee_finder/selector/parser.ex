@@ -5,6 +5,7 @@ defmodule TudeeFinder.Selector.Parser do
   alias TudeeFinder.Selector.AST.BinaryOp
   alias TudeeFinder.Selector.AST.ColorFilter
   alias TudeeFinder.Selector.AST.DimensionFilter
+  alias TudeeFinder.Selector.AST.Not
   alias TudeeFinder.Selector.AST.SideCountFilter
   alias TudeeFinder.Selector.Parser.Error
 
@@ -46,6 +47,14 @@ defmodule TudeeFinder.Selector.Parser do
     |> label("OR")
     |> replace(:or)
 
+  not_operator =
+    choice([
+      string("not"),
+      string("NOT")
+    ])
+    |> label("NOT")
+    |> replace(:not)
+
   dimension_filter =
     choice([small, big])
     |> label("dimension filter")
@@ -85,15 +94,18 @@ defmodule TudeeFinder.Selector.Parser do
     |> optional(blankspace)
     |> ignore(ascii_char([?)]))
 
-  factor =
-    choice([
-      parenthesized_expression,
-      filter
-    ])
-    |> label("factor")
+  negation =
+    ignore(not_operator)
+    |> concat(blankspace)
+    |> parsec(:factor)
+    |> post_traverse(:build_not)
+
+  defcombinatorp :factor,
+                 choice([negation, parenthesized_expression, filter])
+                 |> label("factor")
 
   and_operation =
-    factor
+    parsec(:factor)
     |> concat(blankspace)
     |> ignore(and_operator)
     |> concat(blankspace)
@@ -109,7 +121,7 @@ defmodule TudeeFinder.Selector.Parser do
     |> post_traverse(:build_or)
 
   defcombinatorp :term,
-                 choice([and_operation, factor])
+                 choice([and_operation, parsec(:factor)])
                  |> label("term")
 
   defcombinatorp :expression,
@@ -134,6 +146,10 @@ defmodule TudeeFinder.Selector.Parser do
 
   defp build_and(rest, [rhs, lhs], context, _line, _offset) do
     {rest, [%BinaryOp{lhs: lhs, rhs: rhs, operator: :and}], context}
+  end
+
+  defp build_not(rest, [expression], context, _line, _offset) do
+    {rest, [%Not{expression: expression}], context}
   end
 
   def parse(selector) do
