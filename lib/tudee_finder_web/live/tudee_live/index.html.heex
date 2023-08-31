@@ -22,7 +22,7 @@
 </div>
 
 <.flex :let={{id, tudee}} id="tudees" items={@streams.tudees}>
-  <div class="group relative hover:bg-stone-100 w-40 h-40">
+  <div class="group relative hover:bg-zinc-100 w-40 h-40">
     <.link id={"#{id}-edit"} patch={~p"/#{tudee}/edit"}>
       <.tudee_svg tudee={tudee} />
     </.link>
@@ -41,7 +41,7 @@
     </.link>
   </div>
   <:empty_placeholder>
-    <span class="text-slate-500 italic">
+    <span class="text-zinc-500 italic">
       <%= if @selector != nil and @selector != "", do: "No matching Tudees :(", else: "No Tudees :(" %>
     </span>
   </:empty_placeholder>
