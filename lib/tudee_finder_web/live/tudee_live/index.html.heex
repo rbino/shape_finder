@@ -1,7 +1,7 @@
 <.header>
   Listing Tudees
   <:actions>
-    <.link patch={~p"/tudees/new"}>
+    <.link patch={~p"/new"}>
       <.button>New Tudee</.button>
     </.link>
   </:actions>
@@ -23,7 +23,7 @@
 
 <.flex :let={{id, tudee}} id="tudees" items={@streams.tudees}>
   <div class="group relative hover:bg-stone-100 w-40 h-40">
-    <.link id={"#{id}-edit"} patch={~p"/tudees/#{tudee}/edit"}>
+    <.link id={"#{id}-edit"} patch={~p"/#{tudee}/edit"}>
       <.tudee_svg tudee={tudee} />
     </.link>
     <.link
@@ -51,7 +51,7 @@
   :if={@live_action in [:new, :edit]}
   id="tudee-modal"
   show
-  on_cancel={JS.patch(~p"/tudees")}
+  on_cancel={JS.patch(~p"/")}
 >
   <.live_component
     module={TudeeFinderWeb.TudeeLive.FormComponent}
@@ -59,6 +59,6 @@
     title={@page_title}
     action={@live_action}
     tudee={@tudee}
-    patch={~p"/tudees"}
+    patch={~p"/"}
   />
 </.modal>

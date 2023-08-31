@@ -100,7 +100,7 @@ defmodule TudeeFinderWeb.TudeeLive.Index do
         if socket.assigns[:streams][:tudees] == nil do
           socket
           |> put_flash(:error, "Invalid selector passed as parameter")
-          |> push_navigate(to: ~p"/tudees")
+          |> push_navigate(to: ~p"/")
         else
           # TODO: provide some more detailed feedback in the input field
           # Do not touch the AST, so we keep filtering with the old one
