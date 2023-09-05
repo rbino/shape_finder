@@ -14,6 +14,20 @@ defmodule TudeeFinderWeb.Router do
     plug :accepts, ["json"]
   end
 
+  pipeline :reveal do
+    plug :fetch_session
+    plug :accepts, ["html"]
+    plug :put_root_layout, html: {TudeeFinderWeb.Layouts, :reveal}
+    plug :protect_from_forgery
+    plug :put_secure_browser_headers
+  end
+
+  scope "/presentation", TudeeFinderWeb do
+    pipe_through :reveal
+
+    get "/", PageController, :presentation
+  end
+
   scope "/", TudeeFinderWeb do
     pipe_through :browser
 

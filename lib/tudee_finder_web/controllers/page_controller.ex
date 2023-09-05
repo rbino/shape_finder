@@ -6,4 +6,9 @@ defmodule TudeeFinderWeb.PageController do
     # so skip the default app layout.
     render(conn, :home, layout: false)
   end
+
+  def presentation(conn, _params) do
+    # Skip the default app layout since we're using reveal.js
+    render(conn, :presentation, layout: false)
+  end
 end

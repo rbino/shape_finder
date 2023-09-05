@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <.live_title suffix=" · Code BEAM Europe 2023">
+      <%= assigns[:page_title] || "Craft your query DSL with NimbleParsec and Ecto" %>
+    </.live_title>
+
+		<link phx-track-static rel="stylesheet" href={~p"/assets/reveal.css"} />
+    <link phx-track-static rel="stylesheet" href={~p"/assets/app.css"} />
+
+		<script defer phx-track-static type="text/javascript" src={~p"/assets/reveal.js"}>
+    </script>
+
+	</head>
+  <body class="antialiased">
+    <%= @inner_content %>
+  </body>
+</html>
