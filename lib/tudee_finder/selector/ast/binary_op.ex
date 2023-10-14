@@ -10,11 +10,11 @@ defmodule TudeeFinder.Selector.AST.BinaryOp do
       lhs = Filter.where(binary_op.lhs)
       rhs = Filter.where(binary_op.rhs)
 
-      combine(binary_op.operator, lhs, rhs)
+      case binary_op.operator do
+        :and -> dynamic(^lhs and ^rhs)
+        :or -> dynamic(^lhs or ^rhs)
+      end
     end
-
-    defp combine(:and, lhs, rhs), do: dynamic(^lhs and ^rhs)
-    defp combine(:or, lhs, rhs), do: dynamic(^lhs or ^rhs)
 
     def match?(binary_op, tudee) do
       case binary_op.operator do
