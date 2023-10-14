@@ -9,7 +9,7 @@ defmodule TudeeFinder.Selector.AST.Not do
     def where(not_filter) do
       where = Filter.where(not_filter.expression)
 
-      dynamic([tudee], not (^where))
+      dynamic(not (^where))
     end
 
     def match?(not_filter, tudee) do
