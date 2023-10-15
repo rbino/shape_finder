@@ -157,7 +157,8 @@ defmodule ShapeFinder.Selector.Parser do
       {:ok, [ast_root], _rest, _context, _line, _column} ->
         {:ok, ast_root}
 
-      {:error, reason, _rest, _context, {line, _}, column} ->
+      {:error, reason, _rest, _context, {line, offset_to_start_of_line}, byte_offset} ->
+        column = byte_offset - offset_to_start_of_line
         {:error, %Error{message: reason, line: line, column: column}}
     end
   end
