@@ -369,7 +369,7 @@ defmodule ShapeFinderWeb.CoreComponents do
         id={@id}
         value={Phoenix.HTML.Form.normalize_value(@type, @value)}
         class={[
-          "mt-2 block w-full rounded-lg text-zinc-900 focus:ring-0 sm:text-sm sm:leading-6",
+          "mt-2 block w-full rounded-lg text-zinc-900 focus:ring-0 text-2xl sm:leading-6",
           "phx-no-feedback:border-zinc-300 phx-no-feedback:focus:border-zinc-400",
           @errors == [] && "border-zinc-300 focus:border-zinc-400",
           @errors != [] && "border-rose-400 focus:border-rose-400"
@@ -681,7 +681,7 @@ defmodule ShapeFinderWeb.CoreComponents do
       end
 
     ~H"""
-    <div class="mt-11">
+    <div class="mt-4">
       <div
         id={@id}
         phx-update={match?(%Phoenix.LiveView.LiveStream{}, @items) && "stream"}
