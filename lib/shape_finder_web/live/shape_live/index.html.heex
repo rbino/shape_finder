@@ -1,0 +1,64 @@
+<.header>
+  Listing Shapes
+  <:actions>
+    <.link patch={~p"/new"}>
+      <.button>New Shape</.button>
+    </.link>
+  </:actions>
+</.header>
+
+<div class="flex flex-wrap gap-8 mt-8 justify-center">
+  <form phx-change="selector_updated" class="w-full md:w-1/2">
+    <.input
+      id="shape-selector"
+      name="selector"
+      type="text"
+      placeholder="Selector"
+      value={@selector || ""}
+      errors={List.wrap(@selector_error)}
+      phx-debounce="300"
+    />
+  </form>
+</div>
+
+<.flex :let={{id, shape}} id="shapes" items={@streams.shapes}>
+  <div class="group relative hover:bg-zinc-100 w-40 h-40">
+    <.link id={"#{id}-edit"} patch={~p"/#{shape}/edit"}>
+      <.shape_svg shape={shape} />
+    </.link>
+    <.link
+      id={"#{id}-delete"}
+      phx-click={JS.push("delete", value: %{id: shape.id}) |> hide("##{id}")}
+      data-confirm="Are you sure?"
+    >
+      <button
+        type="button"
+        class="absolute top-1 right-1 invisible group-hover:visible"
+        aria-label={gettext("delete")}
+      >
+        <.icon name="hero-x-mark-solid" class="h-5 w-5 opacity-40 group-hover:opacity-70" />
+      </button>
+    </.link>
+  </div>
+  <:empty_placeholder>
+    <span class="text-zinc-500 italic">
+      <%= if @selector != nil and @selector != "", do: "No matching Shapes :(", else: "No Shapes :(" %>
+    </span>
+  </:empty_placeholder>
+</.flex>
+
+<.modal
+  :if={@live_action in [:new, :edit]}
+  id="shape-modal"
+  show
+  on_cancel={JS.patch(~p"/")}
+>
+  <.live_component
+    module={ShapeFinderWeb.ShapeLive.FormComponent}
+    id={@shape.id || :new}
+    title={@page_title}
+    action={@live_action}
+    shape={@shape}
+    patch={~p"/"}
+  />
+</.modal>

@@ -1,0 +1,33 @@
+<.header>
+  Shape <%= @shape.id %>
+  <:subtitle>This is a shape record from your database.</:subtitle>
+  <:actions>
+    <.link patch={~p"/#{@shape}/show/edit"} phx-click={JS.push_focus()}>
+      <.button>Edit shape</.button>
+    </.link>
+  </:actions>
+</.header>
+
+<.list>
+  <:item title="Color"><%= @shape.color %></:item>
+  <:item title="Sides"><%= @shape.sides %></:item>
+  <:item title="Dimensions"><%= @shape.dimensions %></:item>
+</.list>
+
+<.back navigate={~p"/"}>Back to shapes</.back>
+
+<.modal
+  :if={@live_action == :edit}
+  id="shape-modal"
+  show
+  on_cancel={JS.patch(~p"/#{@shape}")}
+>
+  <.live_component
+    module={ShapeFinderWeb.ShapeLive.FormComponent}
+    id={@shape.id}
+    title={@page_title}
+    action={@live_action}
+    shape={@shape}
+    patch={~p"/#{@shape}"}
+  />
+</.modal>

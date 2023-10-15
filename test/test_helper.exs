@@ -1,2 +1,2 @@
 ExUnit.start()
-Ecto.Adapters.SQL.Sandbox.mode(TudeeFinder.Repo, :manual)
+Ecto.Adapters.SQL.Sandbox.mode(ShapeFinder.Repo, :manual)

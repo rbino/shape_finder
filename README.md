@@ -1,4 +1,4 @@
-# TudeeFinder
+# ShapeFinder
 
 To start your Phoenix server:
 

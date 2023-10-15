@@ -7,17 +7,17 @@
 # General application configuration
 import Config
 
-config :tudee_finder,
-  ecto_repos: [TudeeFinder.Repo]
+config :shape_finder,
+  ecto_repos: [ShapeFinder.Repo]
 
 # Configures the endpoint
-config :tudee_finder, TudeeFinderWeb.Endpoint,
+config :shape_finder, ShapeFinderWeb.Endpoint,
   url: [host: "localhost"],
   render_errors: [
-    formats: [html: TudeeFinderWeb.ErrorHTML, json: TudeeFinderWeb.ErrorJSON],
+    formats: [html: ShapeFinderWeb.ErrorHTML, json: ShapeFinderWeb.ErrorJSON],
     layout: false
   ],
-  pubsub_server: TudeeFinder.PubSub,
+  pubsub_server: ShapeFinder.PubSub,
   live_view: [signing_salt: "1g9Jr3KH"]
 
 # Configures the mailer
@@ -27,7 +27,7 @@ config :tudee_finder, TudeeFinderWeb.Endpoint,
 #
 # For production it's recommended to configure a different adapter
 # at the `config/runtime.exs`.
-config :tudee_finder, TudeeFinder.Mailer, adapter: Swoosh.Adapters.Local
+config :shape_finder, ShapeFinder.Mailer, adapter: Swoosh.Adapters.Local
 
 # Configure esbuild (the version is required)
 config :esbuild,
